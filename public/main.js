@@ -1,13 +1,21 @@
-let $body = $('body');
-let $uiTarget = $('#ui-target');
+// let $body = $('body');
+// uiTargets and dataDisplay should prolly be part of a page construction of some sort
+
+// app level JQ supports
+// let pageNum = 0;
+
+// let $page = $('#page');
+// let $pageNumber = $(`.page-${pageNum}`);
+
+let $uiTargets = $('#ui-targets');
 let $dataDisplay = $('#data-display');
 
 let myName = "";
 
-// i could have a class of uitargets that submit names, first to register, then to vote
+// i could have a class of uitargetss that submit names, first to register, then to vote
 // or something like that.
 
-let $name = $('<form>message:<br><input type="text" name="name"><input type="submit" value="Submit"></form>');
+let $name = $('<form>name:<br><input type="text" name="name"><input type="submit" value="Submit"></form>');
 
 $name.submit(function( event ) {
   event.preventDefault();
@@ -15,8 +23,12 @@ $name.submit(function( event ) {
   updateData(myName);
 });
 
-$body.add($name);
-$uiTarget.append($name);
+$uiTargets.append($name);
+
+/* 
+start doing socket stuff 
+prolly want to call some functions in here that change a display on a higher order
+*/
 
 var socket = io();
 // console.log(socket);
@@ -37,13 +49,22 @@ socket.on('give-name', function () {
   console.log('you are registered as', myName);
 });
 
-socket.on('disconnect', function () {
+socket.on('update-names', function (nameArray) {
+  // do something with data display and nameArray
+  console.log(nameArray);  // works
+});
+
+// step 3
+
+
+socket.on('disconnect', function (myClientIndex) {
   // socket.emit is calling functions on the server from the client side
-  socket.emit('disconnect');
+  socket.emit('disconnect', myClientIndex); // client transport close google it
 });
 
 // updateData is called when a client interacts with the UI target
 // data is shared with all clients through the server
 function updateData (data) {
   socket.emit('register', data);
+  console.log(data); // this works fine, the data is a string, the val in the form
 }

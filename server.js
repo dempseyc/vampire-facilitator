@@ -27,36 +27,39 @@ let gameData = {
     "vampire",
     "camper",
     "healer",
+    "camper",
+    "camper",
+    "joker",
+    "camper",
+    "camper",
+    "camper",
+    "camper",
     "camper"
   ],
   clients: [],
-  numClients: 0,
   gameState: 0,
   players: [],
   };
 
 // io is opening a context where client side functions calls can be received
-io.on('connection', function (socket) {
+io.on('connect', function (socket) {
 
   gameData.clients.push(socket);
-  gameData.numClients += 1;
   // the server is telling socket to connect and get a number
-  socket.emit('connection', gameData.numClients); 
-  // you cant change this to 'connect'  something about socket.io
-  // gameData.numClients gives the client a number
-
-  // do i need socket on connect?
+  // clients.length is a better basis for id, but  
+  // perhaps their basis must be a unique reference,
+  // like a random number of 10000 possibilities, and rest on that uniqueness..  
+  socket.emit('connection', gameData.clients.length);
 
   // in the server here, socket.on() functions are recieving calls from the clients
-  socket.on('register', function (name, number) {
+  socket.on('register', function (name) {
     gameData.players.push(name);
+    io.emit('update-names', gameData.players);
   });
 
-  socket.on('disconnect', function () {
-    let clientIndex = gameData.clients.indexOf(socket);
-    gameData.clients.splice(clientIndex, 1);
-    gameData.numClients -= 1;
-    console.log(`client ${clientIndex} disconected numClients = ${gameData.numClients}`); // using backticks
+  socket.on('disconnect', function (myNumber) {
+    gameData.clients.splice(myNumber, 1); // might have to change this
+    console.log(`client ${myNumber} disconected numClients = ${gameData.clients.length}`); // using backticks
   });
 
 });
