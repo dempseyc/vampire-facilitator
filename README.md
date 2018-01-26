@@ -1,11 +1,8 @@
-# A Socket Template
+# Vampire Facilitator
 
-I only use express and socket.io. This template is more basic than a typical chat app. I don't use middlewares. I only use jquery to facilitate.
+Should use text to speech to guide the game for real-life actors from server emissions.  Change UI to reflect changes of game state on UI devices.  
 
-## Getting Started
 
-Fork it. Run `npm install` .
-
-### hat tip to all o yall! stripped down tutorials from the docs. wanted to present something even a little simpler which still demonstrates the technology, and forms a strong foundation to build upon.
+### Forked from my so-called tutorial, a-socket-template.
 
 #### authorship: Craig Dempsey github.com/dempseyc
